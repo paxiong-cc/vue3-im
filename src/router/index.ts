@@ -2,8 +2,6 @@ import { createRouter, createWebHistory, RouteRecordRaw } from 'vue-router'
 import Layout from '@/layout/index.vue'
 import Home from '@/views/common/home.vue'
 
-import RoleRouter from './role'
-
 const routes: Array<RouteRecordRaw> = [
   // 公共模块
   {
@@ -24,8 +22,19 @@ const routes: Array<RouteRecordRaw> = [
     ]
   },
 
-  // 子模块模板
-  ...RoleRouter,
+  // 模板
+  {
+    path: '',
+    name: 'Template',
+    component: Layout,
+    children: [
+      {
+        path: 'template/:id',
+        name: '模板',
+        component: () => import('@/views/template/index.vue')
+      }
+    ]
+  },
 
   {
     path: '/:catchAll(.*)',

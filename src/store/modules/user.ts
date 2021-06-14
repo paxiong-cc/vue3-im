@@ -1,10 +1,5 @@
 import { Module } from 'vuex'
-import { GlobalDataProps } from '../index'
-
-export interface UserProps {
-  isLogin: boolean;
-  userName?: string;
-}
+import { GlobalDataProps, UserProps } from '../interfaces'
 
 const user: Module<UserProps, GlobalDataProps> = {
   mutations: {
