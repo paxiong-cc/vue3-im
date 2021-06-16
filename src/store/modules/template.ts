@@ -18,6 +18,12 @@ const template: Module<TemplateListProps, GlobalDataProps> = {
 
   mutations: {
 
+  },
+
+  getters: {
+    getElementById: (state) => (id: number) => {
+      return state.data.find(item => item.id === id)
+    }
   }
 }
 
