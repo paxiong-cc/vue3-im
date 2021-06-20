@@ -3,7 +3,7 @@
     <a-layout>
       <a-layout-sider width="300" style="background: #fff">
         <div class="sidebar-container">
-          组件列表
+          <ComponentList :list="defaultTextTemplates" @onItemClick="addItem"/>
         </div>
       </a-layout-sider>
       <a-layout style="padding: 0 24px 24px">
@@ -29,19 +29,27 @@
 <script lang='ts'>
 import { defineComponent, computed } from 'vue'
 import { useStore } from 'vuex'
-import { GlobalDataProps } from '@/store/interfaces'
+import { GlobalDataProps, ComponentData } from '@/store/interfaces'
 import PText from '@/components/PText/index.vue'
+import ComponentList from '@/components/ComponentList/index.vue'
+import { defaultTextTemplates } from '@/utils/data'
 
 export default defineComponent({
   components: {
-    PText
+    PText,
+    ComponentList
   },
 
   setup() {
     const store = useStore<GlobalDataProps>()
     const components = computed(() => store.state.editor.components)
+    const addItem = (item: ComponentData) => {
+      store.commit('addComponent', item)
+    }
     return {
-      components
+      components,
+      defaultTextTemplates,
+      addItem
     }
   }
 })

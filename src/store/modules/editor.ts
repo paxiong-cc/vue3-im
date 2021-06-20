@@ -13,6 +13,12 @@ const editor: Module<EditorProps, GlobalDataProps> = {
   state: {
     components: componentData,
     currentElement: ''
+  },
+
+  mutations: {
+    addComponent(state, item: ComponentData) {
+      state.components.push(item)
+    }
   }
 }
 

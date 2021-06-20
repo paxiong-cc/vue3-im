@@ -1,3 +1,4 @@
+import { TextComponentProps } from '@/components/PText/interface'
 export interface UserProps {
   isLogin: boolean;
   userName?: string;
@@ -13,10 +14,14 @@ export interface TemplateListProps {
   data: TemplateProps[];
 }
 
+// 模板数据接口
 export interface ComponentData {
-  props: { [key: string]: any };
+  // 这个元素的 属性，属性请详见下面
+  props: Partial<TextComponentProps>;
+  // id，uuid v4 生成
   id: string;
-  name: string
+  // 业务组件库名称 l-text，l-image 等等
+  name: 'p-text' | 'p-image';
 }
 
 export interface EditorProps {
