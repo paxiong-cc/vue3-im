@@ -36,6 +36,20 @@ const routes: Array<RouteRecordRaw> = [
     ]
   },
 
+  // 编辑器
+  {
+    path: '',
+    name: 'Editor',
+    component: Layout,
+    children: [
+      {
+        path: 'editor',
+        name: '模板',
+        component: () => import('@/views/editor/index.vue')
+      }
+    ]
+  },
+
   {
     path: '/:catchAll(.*)',
     redirect: '/notFound'

@@ -10,7 +10,12 @@
         <a-layout-content class="preview-container">
           <p>画布区域</p>
           <div class="preview-list" id="canvas-area">
-
+            <PText
+                v-for="component in components"
+                :key="component.id"
+                :id="component.id"
+                v-bind="component.props"
+            />
           </div>
         </a-layout-content>
       </a-layout>
@@ -25,8 +30,13 @@
 import { defineComponent, computed } from 'vue'
 import { useStore } from 'vuex'
 import { GlobalDataProps } from '@/store/interfaces'
+import PText from '@/components/PText/index.vue'
 
 export default defineComponent({
+  components: {
+    PText
+  },
+
   setup() {
     const store = useStore<GlobalDataProps>()
     const components = computed(() => store.state.editor.components)
