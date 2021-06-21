@@ -18,6 +18,16 @@ const editor: Module<EditorProps, GlobalDataProps> = {
   mutations: {
     addComponent(state, item: ComponentData) {
       state.components.push(item)
+    },
+
+    selectCurrentElement(state, id: string) {
+      state.currentElement = id
+    }
+  },
+
+  getters: {
+    getCurrentComponent: (state) => {
+      return state.components.find(item => item.id === state.currentElement)
     }
   }
 }

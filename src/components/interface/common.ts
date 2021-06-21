@@ -1,4 +1,5 @@
 import { mapValues } from 'lodash-es'
+import { TextComponentProps } from '../PText/interface'
 
 // 组件共有属性
 export interface CommonComponentProps {
@@ -55,10 +56,10 @@ export const commonDefaultProps: CommonComponentProps = {
 }
 
 // 与props作对应
-export const transformToComponentProps = <T extends { [key: string]: any }>(props: T) => {
-  return mapValues(props, (item: any) => {
+export const transformToComponentProps = (props: TextComponentProps) => {
+  return mapValues(props, (item) => {
     return {
-      type: item.construcotr,
+      type: item.constructor as StringConstructor,
       default: item
     }
   })

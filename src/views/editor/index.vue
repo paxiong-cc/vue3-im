@@ -11,16 +11,18 @@
           <p>画布区域</p>
           <div class="preview-list" id="canvas-area">
             <PText
-                v-for="component in components"
-                :key="component.id"
-                :id="component.id"
-                v-bind="component.props"
+              v-for="component in components"
+              :key="component.id"
+              v-bind="component.props"
+              @click="selectItem(component.id)"
             />
           </div>
         </a-layout-content>
       </a-layout>
       <a-layout-sider width="300" style="background: #fff" class="settings-panel">
-
+        <pre>
+          {{ selectItemProps && selectItemProps.props }}
+        </pre>
       </a-layout-sider>
     </a-layout>
   </div>
@@ -42,13 +44,27 @@ export default defineComponent({
 
   setup() {
     const store = useStore<GlobalDataProps>()
+
+    // 获取数据
     const components = computed(() => store.state.editor.components)
+    // 获取画布选中组件的属性
+    const selectItemProps = computed(() => store.getters.getCurrentComponent)
+
+    // 添加组件
     const addItem = (item: ComponentData) => {
       store.commit('addComponent', item)
     }
+    // 画布选中组件
+    const selectItem = (id: string) => {
+      // 获取组件属性
+      store.commit('selectCurrentElement', id)
+    }
+
     return {
       components,
       defaultTextTemplates,
+      selectItemProps,
+      selectItem,
       addItem
     }
   }
