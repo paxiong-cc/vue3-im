@@ -27,7 +27,7 @@ const editor: Module<EditorProps, GlobalDataProps> = {
 
   getters: {
     getCurrentComponent: (state) => {
-      return state.components.find(item => item.id === state.currentElement)
+      return state.components.find(item => item.id === state.currentElement) || null
     }
   }
 }
