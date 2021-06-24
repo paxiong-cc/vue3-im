@@ -5,9 +5,24 @@
       :key="idx"
       class="prop-item"
     >
-      <component v-if="item" :is="item.component" :value="item.value">
-
-      </component>
+      <span class="label" v-if="item.text">{{ item.text }}</span>
+      <div class="prop-component">
+        <component
+          :is="item.component"
+          :value="item.value"
+          :props="item.extraProps"
+        >
+          <template v-if="item.options">
+            <component
+              v-for="(_item, _idx) in item.options"
+              :is="item.subComponent"
+              :key="_idx"
+            >
+              {{ _item.value }}
+            </component>
+          </template>
+        </component>
+      </div>
     </div>
   </div>
 </template>
@@ -38,10 +53,11 @@ export default defineComponent({
         const newKey = key as keyof PropsToForms
         const mapPropsItem = mapPropsToForms[newKey]
         if (mapPropsItem) {
-          mapPropsItem.value = props.props[newKey]
+          mapPropsItem.value = mapPropsItem.initalTransform ? mapPropsItem.initalTransform(props.props[newKey]) : props.props[newKey]
         }
         finalProps[newKey] = mapPropsItem
       })
+      console.log(finalProps)
       return finalProps
     })
 
@@ -54,4 +70,15 @@ export default defineComponent({
 </script>
 
 <style lang='scss' scoped>
+.prop-item {
+  display: flex;
+  margin-bottom: 10px;
+  align-items: center;
+}
+.label {
+  width: 28%;
+}
+.prop-component {
+  width: 70%;
+}
 </style>
