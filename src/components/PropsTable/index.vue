@@ -10,15 +10,17 @@
         <component
           :is="item.component"
           :value="item.value"
-          :props="item.extraProps"
+          v-bind="item.extraProps"
+          v-on="item.events"
         >
           <template v-if="item.options">
             <component
               v-for="(_item, _idx) in item.options"
               :is="item.subComponent"
               :key="_idx"
+              :value="_item.value"
             >
-              {{ _item.value }}
+              {{ _item.text }}
             </component>
           </template>
         </component>
@@ -44,20 +46,29 @@ export default defineComponent({
     }
   },
 
-  setup(props) {
+  setup(props, context) {
     const finalProps = computed(() => {
       const keyList = Object.keys(props.props || {})
       const finalProps: PropsToForms = {}
 
-      keyList.forEach(key => {
+      for (const key of keyList) {
         const newKey = key as keyof PropsToForms
+        if (!Reflect.has(mapPropsToForms, newKey)) {
+          continue
+        }
+
         const mapPropsItem = mapPropsToForms[newKey]
         if (mapPropsItem) {
-          mapPropsItem.value = mapPropsItem.initalTransform ? mapPropsItem.initalTransform(props.props[newKey]) : props.props[newKey]
+          const { eventName = 'change', initalTransform, afterTransform } = mapPropsItem
+          mapPropsItem.value = initalTransform ? initalTransform(props.props[newKey]) : props.props[newKey]
+          mapPropsItem.events = {
+            [eventName]: (e: any) => { context.emit('change', { newKey, value: afterTransform ? afterTransform(e) : e }) }
+          }
         }
+
         finalProps[newKey] = mapPropsItem
-      })
-      console.log(finalProps)
+      }
+
       return finalProps
     })
 

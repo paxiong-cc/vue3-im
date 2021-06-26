@@ -6,6 +6,7 @@
           <ComponentList :list="defaultTextTemplates" @onItemClick="addItem"/>
         </div>
       </a-layout-sider>
+
       <a-layout style="padding: 0 24px 24px">
         <a-layout-content class="preview-container">
           <p>画布区域</p>
@@ -20,8 +21,9 @@
           </div>
         </a-layout-content>
       </a-layout>
+
       <a-layout-sider width="300" style="background: #fff" class="settings-panel">
-        <PropsTable :props="selectItemProps && selectItemProps.props" />
+        <PropsTable :props="selectItemProps && selectItemProps.props" @change="contentChange" />
         <pre>
           {{ selectItemProps && selectItemProps.props }}
         </pre>
@@ -65,6 +67,10 @@ export default defineComponent({
       // 获取组件属性
       store.commit('selectCurrentElement', id)
     }
+    // 内容修改
+    const contentChange = (e: any) => {
+      store.commit('updateComponent', e)
+    }
 
     return {
       components,
@@ -72,7 +78,8 @@ export default defineComponent({
       selectItemProps,
       selectItemId,
       selectItem,
-      addItem
+      addItem,
+      contentChange
     }
   }
 })

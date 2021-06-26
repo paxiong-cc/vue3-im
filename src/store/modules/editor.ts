@@ -1,5 +1,6 @@
 import { Module } from 'vuex'
 import { GlobalDataProps, ComponentData, EditorProps } from '../interfaces'
+import { TextComponentProps } from '@/components/PText/interface'
 import { v4 as uuidv4 } from 'uuid'
 
 const componentData: ComponentData[] = [
@@ -13,7 +14,7 @@ const componentData: ComponentData[] = [
 const editor: Module<EditorProps, GlobalDataProps> = {
   state: {
     components: componentData,
-    currentElement: ''
+    currentElement: '' // id
   },
 
   mutations: {
@@ -23,6 +24,13 @@ const editor: Module<EditorProps, GlobalDataProps> = {
 
     selectCurrentElement(state, id: string) {
       state.currentElement = id
+    },
+
+    updateComponent(state, { newKey, value }) {
+      const item = state.components.find(item => item.id === state.currentElement)
+      if (item && newKey) {
+        item.props[newKey as keyof TextComponentProps] = value
+      }
     }
   },
 
