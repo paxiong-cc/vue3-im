@@ -8,7 +8,7 @@ const componentData: ComponentData[] = [
   { id: uuidv4(), name: 'p-text', props: { text: 'hello' }},
   { id: uuidv4(), name: 'p-text', props: { text: 'hello' }},
   { id: uuidv4(), name: 'p-text', props: { text: 'hello' }},
-  { id: uuidv4(), name: 'p-text', props: { text: 'hello3', fontSize: '15px', lineHeight: '3', textAlign: 'left' }}
+  { id: uuidv4(), name: 'p-text', props: { text: 'hello3', fontSize: '15px', lineHeight: '3', textAlign: 'left', fontFamily: '"SimSun","STSong"' }}
 ]
 
 const editor: Module<EditorProps, GlobalDataProps> = {

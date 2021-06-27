@@ -20,7 +20,7 @@
               :key="_idx"
               :value="_item.value"
             >
-              {{ _item.text }}
+              <RenderVnode :vNode="_item.text" />
             </component>
           </template>
         </component>
@@ -33,9 +33,14 @@
 import { defineComponent, PropType, computed } from 'vue'
 import { TextComponentProps } from '../PText/interface'
 import { mapPropsToForms, PropsToForms } from './index'
+import RenderVnode from './RenderVnode'
 
 export default defineComponent({
   name: 'PropsTable',
+
+  components: {
+    RenderVnode
+  },
 
   props: {
     props: {
