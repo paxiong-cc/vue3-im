@@ -3,7 +3,8 @@ import { GlobalDataProps, UserProps } from '../interfaces'
 
 const user: Module<UserProps, GlobalDataProps> = {
   state: {
-    isLogin: false
+    isLogin: false,
+    userName: ''
   },
   mutations: {
     login(state) {

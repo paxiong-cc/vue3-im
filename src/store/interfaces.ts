@@ -5,6 +5,7 @@ export interface UserProps {
 }
 export interface TemplateProps {
   id: number;
+  color: string;
   title: string;
   coverImg: string;
   author: string;

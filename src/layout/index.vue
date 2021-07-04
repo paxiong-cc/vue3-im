@@ -16,7 +16,7 @@
           @click="login"
         >登录</a-button>
         <div v-else>
-        <a-dropdown-button  class="user-profile-component">
+        <a-dropdown-button class="user-profile-component">
           <router-link to="/setting">{{ user.userName }}</router-link>
           <template v-slot:overlay>
             <a-menu class="user-profile-dropdown">

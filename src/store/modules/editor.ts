@@ -4,11 +4,11 @@ import { TextComponentProps } from '@/components/PText/interface'
 import { v4 as uuidv4 } from 'uuid'
 
 const componentData: ComponentData[] = [
-  { id: uuidv4(), name: 'p-text', props: { text: 'hello', fontSize: '12px' }},
-  { id: uuidv4(), name: 'p-text', props: { text: 'hello' }},
-  { id: uuidv4(), name: 'p-text', props: { text: 'hello' }},
-  { id: uuidv4(), name: 'p-text', props: { text: 'hello' }},
-  { id: uuidv4(), name: 'p-text', props: { text: 'hello3', fontSize: '15px', lineHeight: '3', textAlign: 'left', fontFamily: '"SimSun","STSong"' }}
+  { id: uuidv4(), name: 'p-text', props: { text: 'hello', fontSize: '12px' } },
+  { id: uuidv4(), name: 'p-text', props: { text: 'hello' } },
+  { id: uuidv4(), name: 'p-text', props: { text: 'hello' } },
+  { id: uuidv4(), name: 'p-text', props: { text: 'hello' } },
+  { id: uuidv4(), name: 'p-text', props: { text: 'hello3', fontSize: '15px', lineHeight: '3', textAlign: 'left', fontFamily: '"SimSun","STSong"' } }
 ]
 
 const editor: Module<EditorProps, GlobalDataProps> = {

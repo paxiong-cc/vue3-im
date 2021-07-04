@@ -34,12 +34,14 @@ import { defineComponent, PropType, computed } from 'vue'
 import { TextComponentProps } from '../PText/interface'
 import { mapPropsToForms, PropsToForms } from './index'
 import RenderVnode from './RenderVnode'
+import ColorPicker from '../ColorPicker/index.vue'
 
 export default defineComponent({
   name: 'PropsTable',
 
   components: {
-    RenderVnode
+    RenderVnode,
+    ColorPicker
   },
 
   props: {
@@ -50,6 +52,8 @@ export default defineComponent({
       }
     }
   },
+
+  emits: ['change'],
 
   setup(props, context) {
     const finalProps = computed(() => {

@@ -71,5 +71,9 @@ export const mapPropsToForms: PropsToForms = {
       { value: 'right', text: '右' }
     ],
     afterTransform: (e: any) => e.target.value
+  },
+  color: {
+    component: 'ColorPicker',
+    text: '字体颜色'
   }
 }
