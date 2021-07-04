@@ -2,10 +2,13 @@ import { Module } from 'vuex'
 import { GlobalDataProps, UserProps } from '../interfaces'
 
 const user: Module<UserProps, GlobalDataProps> = {
+  state: {
+    isLogin: false
+  },
   mutations: {
     login(state) {
       state.isLogin = true
-      state.userName = 'viking'
+      state.userName = 'paxiong'
     },
     logout(state) {
       state.isLogin = false
