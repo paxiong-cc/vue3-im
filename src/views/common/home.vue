@@ -1,5 +1,6 @@
 <template>
   <div class="home-box">
+    <Upload action="" />
     <a-row :gutter="16">
       <a-col :span="6" v-for="item in list" :key="item.id" class="poster-item">
         <router-link :to="`/template/${item.id}`">
@@ -30,6 +31,7 @@
 
 <script lang='ts'>
 import { defineComponent, reactive } from 'vue'
+import Upload from '@/components/Upload/index.vue'
 
 interface TemplateList {
   id: number;
@@ -41,6 +43,10 @@ interface TemplateList {
 
 export default defineComponent({
   name: 'Home',
+
+  components: {
+    Upload
+  },
 
   setup() {
     const list = reactive<TemplateList[]>([
