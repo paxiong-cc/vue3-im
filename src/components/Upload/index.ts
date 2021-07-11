@@ -6,4 +6,5 @@ export interface UploadFile {
   name: string;
   status: UploadStatus;
   raw: File;
+  resp?: any
 }

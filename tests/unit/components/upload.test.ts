@@ -1,4 +1,4 @@
-import { shallowMount, VueWrapper, flushPromises } from '@vue/test-utils'
+import { shallowMount, VueWrapper, flushPromises, mount } from '@vue/test-utils'
 import Upload from '@/components/Upload/index.vue'
 // import flushPromises from 'flush-promises'
 import axios from 'axios'
@@ -9,6 +9,23 @@ let wrapper: VueWrapper<any>
 const mockedAxios = axios as jest.Mocked<typeof axios>
 const testFile = new File(['xyz'], 'test1.png', { type: 'image/png' })
 const testFile2 = new File(['xyz'], 'test2.png', { type: 'image/png' })
+
+const mockComponent = {
+  template: '<div><slot></slot></div>'
+}
+const mockComponents = {
+  DeleteOutlined: mockComponent,
+  LoadingOutlined: mockComponent,
+  FileOutlined: mockComponent
+}
+
+const setInputValue = (input: HTMLInputElement, file = testFile) => {
+  const files = [file] as any
+  Object.defineProperty(input, 'files', {
+    value: files,
+    writable: false
+  })
+}
 
 describe('Upload Component', () => {
   beforeAll(() => {
@@ -21,7 +38,7 @@ describe('Upload Component', () => {
 
   it('初始化验证', () => {
     expect(wrapper.find('button').exists()).toBeTruthy()
-    expect(wrapper.get('button span').text()).toBe('点击上传')
+    expect(wrapper.get('.upload-area button').text()).toBe('点击上传')
     expect(wrapper.get('input').isVisible()).toBeFalsy()
   })
 
@@ -29,17 +46,14 @@ describe('Upload Component', () => {
     mockedAxios.post.mockResolvedValueOnce(Promise.resolve({ status: 'success' }))
     const fileInput = wrapper.get('input').element as HTMLInputElement
     const files = [testFile] as any
-    Object.defineProperty(fileInput, 'files', {
-      value: files,
-      writable: false
-    })
+    setInputValue(fileInput, files)
     await wrapper.get('input').trigger('change')
     expect(mockedAxios.post).toHaveBeenCalledTimes(1)
-    expect(wrapper.get('button span').text()).toBe('正在上传')
+    expect(wrapper.get('.upload-area button').text()).toBe('正在上传')
     // 按钮为禁用状态
     expect(wrapper.get('button').attributes()).toHaveProperty('disabled')
     await flushPromises()
-    expect(wrapper.get('button span').text()).toBe('点击上传')
+    expect(wrapper.get('.upload-area button').text()).toBe('点击上传')
     expect(wrapper.get('ul li:first-child').classes()).toContain('upload-success')
   })
 
@@ -47,7 +61,7 @@ describe('Upload Component', () => {
     mockedAxios.post.mockRejectedValueOnce({ error: 'error' })
     await wrapper.get('input').trigger('change')
     expect(mockedAxios.post).toHaveBeenCalledTimes(2)
-    expect(wrapper.get('button span').text()).toBe('点击上传')
+    expect(wrapper.get('.upload-area button').text()).toBe('点击上传')
     expect(wrapper.get('ul li:nth-child(2)').classes()).toContain('upload-error')
   })
 
@@ -55,5 +69,40 @@ describe('Upload Component', () => {
     const firstEleDel = wrapper.get('ul li:first-child button')
     await firstEleDel.trigger('click')
     expect(wrapper.findAll('ul li').length).toBe(1)
+  })
+
+  it.only('测试自定义样式上传', async() => {
+    // mockedAxios.post.mockResolvedValueOnce(Promise.resolve({ status: 'success' }))
+    mockedAxios.post.mockResolvedValueOnce(Promise.resolve({ data: { url: 'dummy.url' } }))
+    mockedAxios.post.mockResolvedValueOnce(Promise.resolve({ data: { url: 'xyz.url' } }))
+    // mockedAxios.post.mockResolvedValueOnce({ data: {url: 'xyz.url'}})
+    wrapper = mount(Upload, {
+      props: {
+        action: 'test.url'
+      },
+      slots: {
+        default: '<button>custom button</button>',
+        loading: '<div class="loading">custom loading</div>',
+        uploaded: `<template #uploaded="{ uploadedData }">
+          <div class="custom-loaded">{{ uploadedData.url }}</div>
+        </template>
+        `
+      },
+      global: {
+        stubs: mockComponents
+      }
+    })
+
+    expect(wrapper.get('.upload-area button').text()).toBe('custom button')
+    const fileInput = wrapper.get('input').element as HTMLInputElement
+    setInputValue(fileInput)
+    await wrapper.get('input').trigger('change')
+    expect(wrapper.get('.loading').text()).toBe('custom loading')
+    await flushPromises()
+    expect(wrapper.get('.custom-loaded').text()).toBe('dummy.url')
+    await wrapper.get('input').trigger('change')
+    expect(wrapper.get('.loading').text()).toBe('custom loading')
+    await flushPromises()
+    expect(wrapper.get('.custom-loaded').text()).toBe('xyz.url')
   })
 })
