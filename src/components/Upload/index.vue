@@ -12,7 +12,7 @@
         <button disabled>正在上传</button>
       </slot>
       <slot name="uploaded" v-else-if="lastFileData && lastFileData.loaded" :uploadedData="lastFileData.data">
-        <button>点击上传1</button>
+        <button>点击上传</button>
       </slot>
       <slot v-else name="default">
         <button>点击上传</button>
@@ -46,9 +46,9 @@ import { v4 } from 'uuid'
 
 export default defineComponent({
   components: {
-    DeleteOutlined,
-    LoadingOutlined,
-    FileOutlined
+    // DeleteOutlined,
+    // LoadingOutlined,
+    // FileOutlined
   },
 
   props: {
