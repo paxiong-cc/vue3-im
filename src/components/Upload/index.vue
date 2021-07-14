@@ -1,9 +1,6 @@
 <template>
   <div class="file-upload">
-    <!-- <button @click="triggerUpload" :disabled="isLoadingFlag">
-      <span v-if="isLoadingFlag">正在上传</span>
-      <span v-else>点击上传</span>
-    </button> -->
+    <!-- 按钮 -->
     <div
       class="upload-area"
       @click="triggerUpload"
@@ -24,6 +21,7 @@
       :style="{ display: 'none' }"
       @change="handleFileChange"
     >
+    <!-- 上传列表 -->
     <ul>
       <li
         v-for="(file, idx) in fileList"
@@ -79,7 +77,7 @@ export default defineComponent({
     }
   },
 
-  setup(props) {
+  setup(props, context) {
     const fileInput = ref<null | HTMLInputElement>(null)
     const fileList = ref<UploadFile[]>([])
 
@@ -103,24 +101,18 @@ export default defineComponent({
     }
 
     // 上传前调用
-    const beforeUpload = (file: File, fn: BeforeUpload | undefined) => {
-      if (fn) {
-        fn(file)
-      }
+    const beforeUpload = (file: File) => {
+      context.emit('beforeUpload', file)
     }
 
     // 上传成功回调
-    const uploadSuccess = (fn: fn | undefined) => {
-      if (fn) {
-        fn()
-      }
+    const uploadSuccess = () => {
+      context.emit('uploadSuccess')
     }
 
     // 上传失败回调
-    const uploadError = (fn: fn | undefined) => {
-      if (fn) {
-        fn()
-      }
+    const uploadError = () => {
+      context.emit('uploadError')
     }
 
     // 选择文件
@@ -143,7 +135,7 @@ export default defineComponent({
         fileList.value.push(fileItem)
 
         // 上传前回调
-        beforeUpload(uploadedFile, props.beforeUpload)
+        beforeUpload(uploadedFile)
 
         axios
           .post(props.action, formData, {
@@ -152,17 +144,15 @@ export default defineComponent({
             }
           })
           .then(res => {
-            console.log(res)
             fileItem.status = 'success'
             fileItem.resp = res.data
             // 上传成功回调
-            uploadSuccess(props.uploadSuccess)
+            uploadSuccess()
           })
           .catch(err => {
-            console.log(err)
             fileItem.status = 'error'
             // 上传失败回调
-            uploadError(props.uploadError)
+            uploadError()
           })
           .finally(() => {
             if (fileInput.value) {
