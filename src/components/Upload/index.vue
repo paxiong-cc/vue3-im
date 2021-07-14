@@ -38,11 +38,14 @@
 </template>
 
 <script lang='ts'>
-import { computed, defineComponent, reactive, ref } from 'vue'
+import { computed, defineComponent, reactive, ref, PropType } from 'vue'
 import { DeleteOutlined, LoadingOutlined, FileOutlined } from '@ant-design/icons-vue'
 import axios from 'axios'
 import { UploadFile } from './index'
 import { v4 } from 'uuid'
+
+type BeforeUpload = (file: File) => void
+type fn = () => void
 
 export default defineComponent({
   components: {
@@ -55,6 +58,24 @@ export default defineComponent({
     action: {
       type: String,
       required: true
+    },
+
+    // 上传前回调
+    beforeUpload: {
+      type: Function as PropType<BeforeUpload>,
+      required: false
+    },
+
+    // 上传成功回调
+    uploadSuccess: {
+      type: Function as PropType<fn>,
+      required: false
+    },
+
+    // 上传失败回调
+    uploadError: {
+      type: Function as PropType<fn>,
+      required: false
     }
   },
 
@@ -81,6 +102,27 @@ export default defineComponent({
       }
     }
 
+    // 上传前调用
+    const beforeUpload = (file: File, fn: BeforeUpload | undefined) => {
+      if (fn) {
+        fn(file)
+      }
+    }
+
+    // 上传成功回调
+    const uploadSuccess = (fn: fn | undefined) => {
+      if (fn) {
+        fn()
+      }
+    }
+
+    // 上传失败回调
+    const uploadError = (fn: fn | undefined) => {
+      if (fn) {
+        fn()
+      }
+    }
+
     // 选择文件
     const handleFileChange = (e: Event) => {
       const target = e.target as HTMLInputElement
@@ -100,6 +142,9 @@ export default defineComponent({
         })
         fileList.value.push(fileItem)
 
+        // 上传前回调
+        beforeUpload(uploadedFile, props.beforeUpload)
+
         axios
           .post(props.action, formData, {
             headers: {
@@ -110,10 +155,14 @@ export default defineComponent({
             console.log(res)
             fileItem.status = 'success'
             fileItem.resp = res.data
+            // 上传成功回调
+            uploadSuccess(props.uploadSuccess)
           })
           .catch(err => {
             console.log(err)
             fileItem.status = 'error'
+            // 上传失败回调
+            uploadError(props.uploadError)
           })
           .finally(() => {
             if (fileInput.value) {

@@ -1,4 +1,4 @@
-<template>
+w<template>
   <div class="lego-color-picker">
     <div class="native-color-container">
       <input type="color" :value="value" @input="onChange($event.target.value)">

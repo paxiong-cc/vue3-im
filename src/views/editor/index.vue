@@ -5,6 +5,7 @@
         <div class="sidebar-container">
           <ComponentList :list="defaultTextTemplates" @onItemClick="addItem"/>
         </div>
+        <Upload action="" />
       </a-layout-sider>
 
       <a-layout style="padding: 0 24px 24px">
@@ -40,12 +41,14 @@ import PText from '@/components/PText/index.vue'
 import PropsTable from '@/components/PropsTable/index.vue'
 import ComponentList from '@/components/ComponentList/index.vue'
 import { defaultTextTemplates } from '@/utils/data'
+import Upload from '@/components/Upload/index.vue'
 
 export default defineComponent({
   components: {
     PText,
     ComponentList,
-    PropsTable
+    PropsTable,
+    Upload
   },
 
   setup() {
