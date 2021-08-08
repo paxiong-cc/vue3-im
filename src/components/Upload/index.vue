@@ -1,9 +1,6 @@
 <template>
   <div class="file-upload">
-    <!-- <button @click="triggerUpload" :disabled="isLoadingFlag">
-      <span v-if="isLoadingFlag">正在上传</span>
-      <span v-else>点击上传</span>
-    </button> -->
+    <!-- 按钮 -->
     <div
       class="upload-area"
       @click="triggerUpload"
@@ -12,7 +9,7 @@
         <button disabled>正在上传</button>
       </slot>
       <slot name="uploaded" v-else-if="lastFileData && lastFileData.loaded" :uploadedData="lastFileData.data">
-        <button>点击上传1</button>
+        <button>点击上传</button>
       </slot>
       <slot v-else name="default">
         <button>点击上传</button>
@@ -24,6 +21,7 @@
       :style="{ display: 'none' }"
       @change="handleFileChange"
     >
+    <!-- 上传列表 -->
     <ul>
       <li
         v-for="(file, idx) in fileList"
@@ -38,27 +36,48 @@
 </template>
 
 <script lang='ts'>
-import { computed, defineComponent, reactive, ref } from 'vue'
-import { DeleteOutlined, LoadingOutlined, FileOutlined } from '@ant-design/icons-vue'
+import { computed, defineComponent, reactive, ref, PropType } from 'vue'
+// import { DeleteOutlined, LoadingOutlined, FileOutlined } from '@ant-design/icons-vue'
 import axios from 'axios'
 import { UploadFile } from './index'
 import { v4 } from 'uuid'
 
+type BeforeUpload = (file: File) => void
+type fn = () => void
+
 export default defineComponent({
   components: {
-    DeleteOutlined,
-    LoadingOutlined,
-    FileOutlined
+    // DeleteOutlined,
+    // LoadingOutlined,
+    // FileOutlined
   },
 
   props: {
     action: {
       type: String,
       required: true
+    },
+
+    // 上传前回调
+    beforeUpload: {
+      type: Function as PropType<BeforeUpload>,
+      required: false
+    },
+
+    // 上传成功回调
+    uploadSuccess: {
+      type: Function as PropType<fn>,
+      required: false
+    },
+
+    // 上传失败回调
+    uploadError: {
+      type: Function as PropType<fn>,
+      required: false
     }
   },
 
-  setup(props) {
+  setup(props, context) {
     const fileInput = ref<null | HTMLInputElement>(null)
     const fileList = ref<UploadFile[]>([])
 
@@ -81,6 +100,21 @@ export default defineComponent({
       }
     }
 
+    // 上传前调用
+    const beforeUpload = (file: File) => {
+      context.emit('beforeUpload', file)
+    }
+
+    // 上传成功回调
+    const uploadSuccess = () => {
+      context.emit('uploadSuccess')
+    }
+
+    // 上传失败回调
+    const uploadError = () => {
+      context.emit('uploadError')
+    }
+
     // 选择文件
     const handleFileChange = (e: Event) => {
       const target = e.target as HTMLInputElement
@@ -100,6 +134,9 @@ export default defineComponent({
         })
         fileList.value.push(fileItem)
 
+        // 上传前回调
+        beforeUpload(uploadedFile)
+
         axios
           .post(props.action, formData, {
             headers: {
@@ -107,13 +144,15 @@ export default defineComponent({
             }
           })
           .then(res => {
-            console.log(res)
             fileItem.status = 'success'
             fileItem.resp = res.data
+            // 上传成功回调
+            uploadSuccess()
           })
-          .catch(err => {
-            console.log(err)
+          .catch(() => {
             fileItem.status = 'error'
+            // 上传失败回调
+            uploadError()
           })
           .finally(() => {
             if (fileInput.value) {

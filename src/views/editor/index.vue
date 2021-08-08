@@ -1,32 +1,48 @@
 <template>
   <div class="editor-container">
     <a-layout>
+      <!-- 组件选择 -->
       <a-layout-sider width="300" style="background: #fff">
         <div class="sidebar-container">
           <ComponentList :list="defaultTextTemplates" @onItemClick="addItem"/>
         </div>
       </a-layout-sider>
 
+      <!-- 编辑页面 -->
       <a-layout style="padding: 0 24px 24px">
         <a-layout-content class="preview-container">
           <p>画布区域</p>
           <div class="preview-list" id="canvas-area">
-            <PText
-              :class="[selectItemId === component.id ? 'edit-wrapper' : '']"
-              v-for="component in components"
-              :key="component.id"
-              v-bind="component.props"
-              @click="selectItem(component.id)"
-            />
+              <PText
+                :class="[selectItemId === component.id ? 'edit-wrapper' : '']"
+                v-for="component in editComponents"
+                :key="component.id"
+                v-bind="component.props"
+                 @click="selectItem(component.id)"
+              />
           </div>
         </a-layout-content>
       </a-layout>
 
+      <!-- 选项列表 -->
       <a-layout-sider width="300" style="background: #fff" class="settings-panel">
-        <PropsTable :props="selectItemProps && selectItemProps.props" @change="contentChange" />
-        <pre>
-          {{ selectItemProps && selectItemProps.props }}
-        </pre>
+        <a-tabs v-model:activeKey="activeKey">
+          <a-tab-pane key="1" tab="组件属性">
+            <template v-if="selectItemProps && !selectItemProps.isHidden">
+              <PropsTable :props="selectItemProps.props" @change="contentChange" />
+              <pre>
+                {{ selectItemProps && selectItemProps.props }}
+              </pre>
+            </template>
+            <template v-else>
+              该组件暂被隐藏
+            </template>
+          </a-tab-pane>
+
+          <a-tab-pane key="2" tab="组件列表" force-render>
+            <MountList @selectItem="selectItem" :template-list="components" />
+          </a-tab-pane>
+        </a-tabs>
       </a-layout-sider>
     </a-layout>
   </div>
@@ -40,12 +56,14 @@ import PText from '@/components/PText/index.vue'
 import PropsTable from '@/components/PropsTable/index.vue'
 import ComponentList from '@/components/ComponentList/index.vue'
 import { defaultTextTemplates } from '@/utils/data'
+import MountList from '@/components/MountList/index.vue'
 
 export default defineComponent({
   components: {
     PText,
     ComponentList,
-    PropsTable
+    PropsTable,
+    MountList
   },
 
   setup() {
@@ -53,9 +71,12 @@ export default defineComponent({
 
     // 获取数据
     const components = computed(() => store.state.editor.components)
+    // 编辑页面数据
+    const editComponents = computed(() => store.state.editor.components.filter(item => !item.isHidden))
     // 获取画布选中组件的属性
     const selectItemProps = computed<ComponentData | null>(() => store.getters.getCurrentComponent)
     const selectItemId = ref<string>('')
+    const activeKey = ref('1')
 
     // 添加组件
     const addItem = (item: ComponentData) => {
@@ -77,6 +98,8 @@ export default defineComponent({
       defaultTextTemplates,
       selectItemProps,
       selectItemId,
+      activeKey,
+      editComponents,
       selectItem,
       addItem,
       contentChange

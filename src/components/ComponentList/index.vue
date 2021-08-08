@@ -39,7 +39,10 @@ export default defineComponent({
       const componentData: ComponentData = {
         name: 'p-text',
         id: uuidv4(),
-        props
+        props,
+        isHidden: false,
+        isLocked: false,
+        text: '组件一'
       }
       context.emit('on-item-click', componentData)
     }

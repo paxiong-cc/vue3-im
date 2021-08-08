@@ -23,6 +23,9 @@ export interface ComponentData {
   id: string;
   // 业务组件库名称 l-text，l-image 等等
   name: 'p-text' | 'p-image';
+  isHidden: boolean;
+  isLocked: boolean;
+  text: string;
 }
 
 export interface EditorProps {
