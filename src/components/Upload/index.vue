@@ -37,7 +37,7 @@
 
 <script lang='ts'>
 import { computed, defineComponent, reactive, ref, PropType } from 'vue'
-// import { DeleteOutlined, LoadingOutlined, FileOutlined } from '@ant-design/icons-vue'
+import { DeleteOutlined, LoadingOutlined, FileOutlined } from '@ant-design/icons-vue'
 import axios from 'axios'
 import { UploadFile } from './index'
 import { v4 } from 'uuid'
@@ -149,7 +149,7 @@ export default defineComponent({
             // 上传成功回调
             uploadSuccess()
           })
-          .catch(() => {
+          .catch(err => {
             fileItem.status = 'error'
             // 上传失败回调
             uploadError()

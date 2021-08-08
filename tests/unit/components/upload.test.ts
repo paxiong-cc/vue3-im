@@ -71,7 +71,7 @@ describe('Upload Component', () => {
     expect(wrapper.findAll('ul li').length).toBe(1)
   })
 
-  it.only('测试自定义样式上传', async() => {
+  it('测试自定义样式上传', async() => {
     // mockedAxios.post.mockResolvedValueOnce(Promise.resolve({ status: 'success' }))
     mockedAxios.post.mockResolvedValueOnce(Promise.resolve({ data: { url: 'dummy.url' } }))
     mockedAxios.post.mockResolvedValueOnce(Promise.resolve({ data: { url: 'xyz.url' } }))
