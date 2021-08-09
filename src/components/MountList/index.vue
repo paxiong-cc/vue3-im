@@ -18,7 +18,7 @@
         <template v-slot:icon v-else><LockOutlined /> </template>
       </a-button>
     </a-tooltip>
-    <EditText :text="item.text" style="flex: 1" />
+    <EditText :text="item.text" :is-locked="item.isLocked" style="flex: 1" />
   </div>
 </template>
 

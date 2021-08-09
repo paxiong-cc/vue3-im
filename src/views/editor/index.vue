@@ -28,11 +28,14 @@
       <a-layout-sider width="300" style="background: #fff" class="settings-panel">
         <a-tabs v-model:activeKey="activeKey">
           <a-tab-pane key="1" tab="组件属性">
-            <template v-if="selectItemProps && !selectItemProps.isHidden">
+            <template v-if="selectItemProps && !selectItemProps.isHidden && !selectItemProps.isLocked">
               <PropsTable :props="selectItemProps.props" @change="contentChange" />
               <pre>
                 {{ selectItemProps && selectItemProps.props }}
               </pre>
+            </template>
+            <template v-else-if="selectItemProps && selectItemProps.isLocked">
+              该组件被锁定
             </template>
             <template v-else>
               该组件暂被隐藏

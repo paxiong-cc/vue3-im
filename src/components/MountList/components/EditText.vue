@@ -1,5 +1,5 @@
 <template>
-  <div @click="tapInput" class="inline-edit" ref="wrapper">
+  <div @click="handleClick" class="inline-edit" ref="wrapper">
     <input
       v-model="innerValue"
       v-if="isEditing"
@@ -7,13 +7,14 @@
       ref="inputRef"
       class="ant-input"
     />
-    <slot v-else :text="innerValue"><span>{{innerValue}}</span></slot>
+    <slot v-else :text="innerValue"><span>{{ innerValue }}</span></slot>
   </div>
 </template>
 
 <script lang='ts'>
-import { defineComponent, ref, watch } from 'vue'
+import { defineComponent, ref, watch, nextTick } from 'vue'
 import useMouseOut from '@/hooks/useMounseOut'
+import useHotKey from '@/hooks/useHotKey'
 
 export default defineComponent({
   name: 'Home',
@@ -22,31 +23,60 @@ export default defineComponent({
     text: {
       type: String,
       required: true
+    },
+
+    isLocked: {
+      type: Boolean,
+      required: true
     }
   },
 
   setup(props) {
     const innerValue = ref(props.text)
+    const inputRef = ref<null | HTMLElement>(null)
     const isEditing = ref(false)
     const wrapper = ref<null | HTMLElement>(null)
     const isOutside = useMouseOut(wrapper)
 
     watch(isOutside, (newValue) => {
-      newValue
-        ? isEditing.value = false
-        : isEditing.value = true
-      console.log(newValue, 555)
+      isEditing.value = !newValue
     })
 
-    const tapInput = () => {
+    watch(isEditing, async(newValue) => {
+      if (!newValue) {
+        return
+      }
+
+      await nextTick()
+
+      if (inputRef.value) {
+        inputRef.value.focus()
+      }
+    })
+
+    useHotKey('Enter', () => {
+      if (isEditing.value) {
+        isEditing.value = false
+      }
+    })
+
+    useHotKey('Escape', () => {
+      if (isEditing.value) {
+        isEditing.value = false
+        innerValue.value = props.text
+      }
+    })
+
+    const handleClick = () => {
       isEditing.value = true
     }
 
     return {
       isEditing,
+      inputRef,
       innerValue,
-      wrapper,
-      tapInput
+      handleClick,
+      wrapper
     }
   }
 })
