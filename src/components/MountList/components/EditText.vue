@@ -23,11 +23,6 @@ export default defineComponent({
     text: {
       type: String,
       required: true
-    },
-
-    isLocked: {
-      type: Boolean,
-      required: true
     }
   },
 
@@ -52,6 +47,10 @@ export default defineComponent({
       if (inputRef.value) {
         inputRef.value.focus()
       }
+    })
+
+    watch(() => props.text, (newValue) => {
+      innerValue.value = newValue
     })
 
     useHotKey('Enter', () => {

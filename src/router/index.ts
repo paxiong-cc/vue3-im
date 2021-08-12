@@ -1,6 +1,6 @@
 import { createRouter, createWebHistory, RouteRecordRaw } from 'vue-router'
 import Layout from '@/layout/index.vue'
-import Home from '@/views/common/home.vue'
+// import Home from '@/views/common/home.vue'
 
 const routes: Array<RouteRecordRaw> = [
   // 公共模块
@@ -12,7 +12,7 @@ const routes: Array<RouteRecordRaw> = [
       {
         path: '',
         name: '首页',
-        component: Home
+        component: () => import('@/views/editor/index.vue')
       },
       {
         path: 'notFound',
