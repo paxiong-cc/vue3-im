@@ -29,7 +29,8 @@
         <a-tabs v-model:activeKey="activeKey">
           <a-tab-pane key="1" tab="组件属性">
             <template v-if="selectItemProps && !selectItemProps.isHidden && !selectItemProps.isLocked">
-              <PropsTable :props="selectItemProps.props" @change="contentChange" />
+              <!-- <PropsTable :props="selectItemProps.props" @change="contentChange" /> -->
+              <EditGroup :props="selectItemProps.props"  @change="contentChange"/>
               <pre>
                 {{ selectItemProps && selectItemProps.props }}
               </pre>
@@ -60,13 +61,15 @@ import PropsTable from '@/components/PropsTable/index.vue'
 import ComponentList from '@/components/ComponentList/index.vue'
 import { defaultTextTemplates } from '@/utils/data'
 import MountList from '@/components/MountList/index.vue'
+import EditGroup from '@/components/EditGroup/index.vue'
 
 export default defineComponent({
   components: {
     PText,
     ComponentList,
-    PropsTable,
-    MountList
+    // PropsTable,
+    MountList,
+    EditGroup
   },
 
   setup() {
