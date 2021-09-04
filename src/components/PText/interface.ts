@@ -31,4 +31,4 @@ export const textDefaultProps: TextComponentProps = {
   ...commonDefaultProps
 }
 
-export const textStylePropNames = without(Object.keys(textDefaultProps), 'actionType', 'url', 'text')
+export const textStylePropNames = without(Object.keys(textDefaultProps), 'actionType', 'url', 'text', 'position', 'top', 'left', 'width', 'height')

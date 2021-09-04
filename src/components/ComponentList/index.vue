@@ -6,7 +6,7 @@
       class="component-item"
       @click="onItemClick(item)"
     >
-      <PText v-bind="item" />
+      <PText style="position: relative" v-bind="item" />
     </div>
   </div>
 </template>

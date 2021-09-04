@@ -12,14 +12,20 @@
       <a-layout style="padding: 0 24px 24px">
         <a-layout-content class="preview-container">
           <p>画布区域</p>
-          <div class="preview-list" id="canvas-area">
-              <PText
-                :class="[selectItemId === component.id ? 'edit-wrapper' : '']"
-                v-for="component in editComponents"
-                :key="component.id"
+          <div class="preview-list" id="canvas-area" :style="{ backgroundImage: `url(${getBackPic})` }">
+            <edit-wrapper
+              v-for="component in editComponents"
+              :key="component.id"
+              :active="selectItemId === component.id"
+              :props="component.props"
+               @click="selectItem(component.id)"
+               @moveDown="moveDown"
+            >
+              <component
                 v-bind="component.props"
-                 @click="selectItem(component.id)"
-              />
+                :is="component.name"
+              ></component>
+            </edit-wrapper>
           </div>
         </a-layout-content>
       </a-layout>
@@ -43,7 +49,11 @@
             </template>
           </a-tab-pane>
 
-          <a-tab-pane key="2" tab="组件列表" force-render>
+          <a-tab-pane key="2" tab="背景设置">
+            <BackGround />
+          </a-tab-pane>
+
+          <a-tab-pane key="3" tab="组件列表">
             <MountList @selectItem="selectItem" :template-list="components" />
           </a-tab-pane>
         </a-tabs>
@@ -57,11 +67,13 @@ import { defineComponent, computed, ref } from 'vue'
 import { useStore } from 'vuex'
 import { GlobalDataProps, ComponentData } from '@/store/interfaces'
 import PText from '@/components/PText/index.vue'
+import BackGround from './components/BackGround.vue'
 import PropsTable from '@/components/PropsTable/index.vue'
 import ComponentList from '@/components/ComponentList/index.vue'
 import { defaultTextTemplates } from '@/utils/data'
 import MountList from '@/components/MountList/index.vue'
 import EditGroup from '@/components/EditGroup/index.vue'
+import EditWrapper from '@/components/EditWrapper/index.vue'
 
 export default defineComponent({
   components: {
@@ -69,7 +81,9 @@ export default defineComponent({
     ComponentList,
     // PropsTable,
     MountList,
-    EditGroup
+    BackGround,
+    EditGroup,
+    EditWrapper
   },
 
   setup() {
@@ -81,6 +95,7 @@ export default defineComponent({
     const editComponents = computed(() => store.state.editor.components.filter(item => !item.isHidden))
     // 获取画布选中组件的属性
     const selectItemProps = computed<ComponentData | null>(() => store.getters.getCurrentComponent)
+    const getBackPic = computed(() => store.getters.getBackPic)
     const selectItemId = ref<string>('')
     const activeKey = ref('1')
 
@@ -99,6 +114,11 @@ export default defineComponent({
       store.commit('updateComponent', e)
     }
 
+    // 移动结束
+    const moveDown = (obj: { left: number, top: number }) => {
+      store.commit('setPosition', obj)
+    }
+
     return {
       components,
       defaultTextTemplates,
@@ -106,7 +126,9 @@ export default defineComponent({
       selectItemId,
       activeKey,
       editComponents,
+      getBackPic,
       selectItem,
+      moveDown,
       addItem,
       contentChange
     }
@@ -129,9 +151,9 @@ export default defineComponent({
   padding: 0;
   margin: 0;
   min-width: 375px;
-  min-height: 200px;
+  min-height: 600px;
   border: 1px solid #efefef;
-  background: #fff;
+  background: #fff no-repeat;
   overflow-x: hidden;
   overflow-y: auto;
   position: fixed;
@@ -141,7 +163,6 @@ export default defineComponent({
 .edit-wrapper {
   padding: 0px;
   cursor: pointer;
-  border: 1px solid #1890ff !important;
   user-select: none;
 }
 .edit-wrapper:hover {
@@ -151,5 +172,8 @@ export default defineComponent({
   border: 1px solid #1890ff;
   user-select: none;
   z-index: 1500;
+}
+#canvas-area {
+  background-size: 100% auto;
 }
 </style>

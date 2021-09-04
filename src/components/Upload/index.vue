@@ -22,7 +22,7 @@
       @change="handleFileChange"
     >
     <!-- 上传列表 -->
-    <ul>
+    <!-- <ul>
       <li
         v-for="(file, idx) in fileList"
         :class="`uploaded-file upload-${file.status}`"
@@ -31,7 +31,7 @@
         <span class="filename">{{ file.name }}</span>
         <button @click="deleteFileItem(idx)">Del</button>
       </li>
-    </ul>
+    </ul> -->
   </div>
 </template>
 
@@ -149,7 +149,7 @@ export default defineComponent({
             // 上传成功回调
             uploadSuccess()
           })
-          .catch(err => {
+          .catch(() => {
             fileItem.status = 'error'
             // 上传失败回调
             uploadError()

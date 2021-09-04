@@ -29,6 +29,7 @@ export interface ComponentData {
 }
 
 export interface EditorProps {
+  backPic: string;
   components: ComponentData[];
   currentElement: string
 }
