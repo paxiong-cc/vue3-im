@@ -115,7 +115,7 @@ export default defineComponent({
     }
 
     // 移动结束
-    const moveDown = (obj: { left: number, top: number }) => {
+    const moveDown = (obj: { left?: number, top?: number, width?: number, height?: number }) => {
       store.commit('setPosition', obj)
     }
 

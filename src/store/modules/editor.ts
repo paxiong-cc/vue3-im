@@ -38,11 +38,24 @@ const editor: Module<EditorProps, GlobalDataProps> = {
       state.backPic = src
     },
 
-    setPosition(state, { top, left }) {
+    setPosition(state, positions) {
       const item = state.components.find(item => item.id === state.currentElement)
       if (item) {
-        item.props.top = top + 'px'
-        item.props.left = left + 'px'
+        if (positions.top) {
+          item.props.top = positions.top + 'px'
+        }
+
+        if (positions.left) {
+          item.props.left = positions.left + 'px'
+        }
+
+        if (positions.width) {
+          item.props.width = positions.width + 'px'
+        }
+
+        if (positions.height) {
+          item.props.height = positions.height + 'px'
+        }
       }
     }
   },

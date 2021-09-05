@@ -8,19 +8,26 @@
   >
     <slot></slot>
     <div class="resizers">
-      <div class='resizer top-left'></div>
-      <div class='resizer top-right'></div>
-      <div class='resizer bottom-left'></div>
-      <div class='resizer bottom-right'></div>
+      <div class='resizer top-left' @mousedown.stop="startResize('top-left')"></div>
+      <div class='resizer top-right' @mousedown.stop="startResize('top-right')"></div>
+      <div class='resizer bottom-left' @mousedown.stop="startResize('bottom-left')"></div>
+      <div class='resizer bottom-right' @mousedown.stop="startResize('bottom-right')"></div>
     </div>
   </div>
 </template>
 
 <script lang='ts'>
-import { defineComponent, PropType, ref } from 'vue'
+import { defineComponent, PropType, ref, nextTick } from 'vue'
 import { ComponentData } from '@/store/interfaces'
 import { pick as _pick } from 'lodash-es'
 import { context } from 'ant-design-vue/lib/vc-image/src/PreviewGroup'
+type ResizePosition = 'top-left' | 'top-right' | 'bottom-left' | 'bottom-right'
+interface OriginalPositions {
+  left: number;
+  right: number;
+  top: number;
+  bottom: number;
+}
 
 export default defineComponent({
   name: 'Home',
@@ -89,19 +96,93 @@ export default defineComponent({
         }
       }
       const mouseUp = (e: MouseEvent) => {
+        document.removeEventListener('mousemove', mouseMove)
         const { left, top } = caculateMovePosition(e)
         context.emit('moveDown', { left, top })
-        document.removeEventListener('mousemove', mouseMove)
-        document.removeEventListener('mouseup', mouseUp)
+        nextTick(() => {
+          document.removeEventListener('mouseup', mouseUp)
+        })
       }
 
       document.addEventListener('mousemove', mouseMove)
       document.addEventListener('mouseup', mouseUp)
     }
 
+    // 调整大小
+    const startResize = (position: ResizePosition) => {
+      const currentElement = element.value as HTMLElement
+      const { left, right, top, bottom } = currentElement.getBoundingClientRect()
+
+      // 获取位置信息
+      const calculateSize = (e: MouseEvent, position: ResizePosition, positions: OriginalPositions) => {
+        const { left, top, right, bottom } = positions
+        const wrapperElement = document.getElementById('canvas-area') as HTMLElement
+        const { clientX, clientY } = e
+
+        switch (position) {
+          case 'top-left':
+            return {
+              width: right - clientX,
+              height: bottom - clientY,
+              left: clientX - wrapperElement.offsetLeft,
+              top: clientY - wrapperElement.offsetTop
+            }
+          case 'top-right':
+            return {
+              width: clientX - left,
+              height: bottom - clientY,
+              top: clientY - wrapperElement.offsetTop
+            }
+          case 'bottom-left':
+            return {
+              width: right - clientX,
+              height: clientY - top,
+              left: clientX - wrapperElement.offsetLeft
+            }
+          case 'bottom-right':
+            return {
+              width: clientX - left,
+              height: clientY - top
+            }
+        }
+      }
+
+      const handleMove = (e: MouseEvent) => {
+        if (currentElement) {
+          const getSize = calculateSize(e, position, { left, right, top, bottom })
+          const { style } = currentElement
+          if (getSize) {
+            style.width = getSize.width + 'px'
+            style.height = getSize.height + 'px'
+
+            if (getSize.left) {
+              style.left = getSize.left + 'px'
+            }
+
+            if (getSize.top) {
+              style.top = getSize.top + 'px'
+            }
+          }
+        }
+      }
+
+      const handleUp = (e: MouseEvent) => {
+        document.removeEventListener('mousemove', handleMove)
+        const getSize = calculateSize(e, position, { left, right, top, bottom })
+        context.emit('moveDown', getSize)
+        nextTick(() => {
+          document.removeEventListener('mouseup', handleUp)
+        })
+      }
+
+      document.addEventListener('mousemove', handleMove)
+      document.addEventListener('mouseup', handleUp)
+    }
+
     return {
       styles,
       element,
+      startResize,
       startMove
     }
   }
