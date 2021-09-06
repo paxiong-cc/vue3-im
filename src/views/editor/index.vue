@@ -18,6 +18,8 @@
               :key="component.id"
               :active="selectItemId === component.id"
               :props="component.props"
+              :id="component.id"
+              :select-id="selectItemId"
                @click="selectItem(component.id)"
                @moveDown="moveDown"
             >
@@ -74,6 +76,7 @@ import { defaultTextTemplates } from '@/utils/data'
 import MountList from '@/components/MountList/index.vue'
 import EditGroup from '@/components/EditGroup/index.vue'
 import EditWrapper from '@/components/EditWrapper/index.vue'
+import initHotKeys from '@/plugins/hotKeys'
 
 export default defineComponent({
   components: {
@@ -87,6 +90,7 @@ export default defineComponent({
   },
 
   setup() {
+    initHotKeys()
     const store = useStore<GlobalDataProps>()
 
     // 获取数据
@@ -96,7 +100,8 @@ export default defineComponent({
     // 获取画布选中组件的属性
     const selectItemProps = computed<ComponentData | null>(() => store.getters.getCurrentComponent)
     const getBackPic = computed(() => store.getters.getBackPic)
-    const selectItemId = ref<string>('')
+    // const selectItemId = ref<string>('')
+    const selectItemId = computed(() => store.getters.getCurrentElement)
     const activeKey = ref('1')
 
     // 添加组件
@@ -105,7 +110,6 @@ export default defineComponent({
     }
     // 画布选中组件
     const selectItem = (id: string) => {
-      selectItemId.value = id
       // 获取组件属性
       store.commit('selectCurrentElement', id)
     }

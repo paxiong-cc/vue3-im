@@ -17,7 +17,7 @@
 </template>
 
 <script lang='ts'>
-import { defineComponent, PropType, ref, nextTick } from 'vue'
+import { defineComponent, PropType, ref, nextTick, computed } from 'vue'
 import { ComponentData } from '@/store/interfaces'
 import { pick as _pick } from 'lodash-es'
 import { context } from 'ant-design-vue/lib/vc-image/src/PreviewGroup'
@@ -33,6 +33,14 @@ export default defineComponent({
   name: 'Home',
 
   props: {
+    id: {
+      type: String
+    },
+
+    selectId: {
+      type: String
+    },
+
     active: {
       type: Boolean,
       default: true
@@ -44,11 +52,14 @@ export default defineComponent({
   },
 
   setup(props, context) {
-    const styles = _pick(props.props, ['position', 'top', 'left', 'width', 'height'])
+    const styles = computed(() => _pick(props.props, ['position', 'top', 'left', 'width', 'height']))
     const element = ref<HTMLElement | null>(null)
 
     // 移动
     const startMove = (e: MouseEvent) => {
+      if (props.id !== props.selectId) {
+        return
+      }
       // 鼠标与元素偏移
       const gap = {
         x: 0,
@@ -67,12 +78,6 @@ export default defineComponent({
       // 获取当前元素的top, left
       const caculateMovePosition = (e: MouseEvent) => {
         const container = document.getElementById('canvas-area') as HTMLElement
-
-        // const left = e.clientX - gap.x - container.offsetLeft >= 0
-        //   ? e.clientX - gap.x - container.offsetLeft + elementWidth <= container.offsetWidth
-        //     ? e.clientX - gap.x - container.offsetLeft
-        //     : parseInt(String(container.offsetWidth - elementWidth))
-        //   : 0
 
         const left = e.clientX - gap.x - container.offsetLeft >= 0
           ? e.clientX - gap.x - container.offsetLeft
@@ -99,6 +104,7 @@ export default defineComponent({
         document.removeEventListener('mousemove', mouseMove)
         const { left, top } = caculateMovePosition(e)
         context.emit('moveDown', { left, top })
+
         nextTick(() => {
           document.removeEventListener('mouseup', mouseUp)
         })
@@ -125,13 +131,13 @@ export default defineComponent({
               width: right - clientX,
               height: bottom - clientY,
               left: clientX - wrapperElement.offsetLeft,
-              top: clientY - wrapperElement.offsetTop
+              top: clientY - wrapperElement.offsetTop + wrapperElement.scrollTop
             }
           case 'top-right':
             return {
               width: clientX - left,
               height: bottom - clientY,
-              top: clientY - wrapperElement.offsetTop
+              top: clientY - wrapperElement.offsetTop + wrapperElement.scrollTop
             }
           case 'bottom-left':
             return {

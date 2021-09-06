@@ -3,7 +3,7 @@
     <!-- 顶部 -->
     <a-layout :style="{background: '#fff'}">
       <a-layout-header class="header">
-        <div class="page-title">
+        <!-- <div class="page-title">
           <router-link to="/">
             <span>怕熊乐高</span>
           </router-link>
@@ -16,15 +16,15 @@
           @click="login"
         >登录</a-button>
         <div v-else>
-        <a-dropdown-button class="user-profile-component">
-          <router-link to="/setting">{{ user.userName }}</router-link>
-          <template v-slot:overlay>
-            <a-menu class="user-profile-dropdown">
-              <a-menu-item key="0" @click="logout">登出</a-menu-item>
-            </a-menu>
-          </template>
-        </a-dropdown-button>
-      </div>
+          <a-dropdown-button class="user-profile-component">
+            <router-link to="/setting">{{ user.userName }}</router-link>
+            <template v-slot:overlay>
+              <a-menu class="user-profile-dropdown">
+                <a-menu-item key="0" @click="logout">登出</a-menu-item>
+              </a-menu>
+            </template>
+          </a-dropdown-button>
+        </div> -->
       </a-layout-header>
       <!-- 内容 -->
       <a-layout-content class="content">

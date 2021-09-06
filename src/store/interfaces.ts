@@ -31,7 +31,8 @@ export interface ComponentData {
 export interface EditorProps {
   backPic: string;
   components: ComponentData[];
-  currentElement: string
+  currentElement: string;
+  copyComponent: ComponentData | ''
 }
 
 export interface GlobalDataProps {
