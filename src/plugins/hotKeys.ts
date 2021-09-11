@@ -41,4 +41,10 @@ export default function initHotKeys() {
   useHotKey('right', () => {
     store.commit('moveComponent', { direction: 'left', amount: 1 })
   })
+  useHotKey('ctrl+z', preventDefault(() => {
+    store.commit('redo')
+  }))
+  useHotKey('ctrl+shift+z', preventDefault(() => {
+    store.commit('undo')
+  }))
 }

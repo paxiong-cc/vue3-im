@@ -28,11 +28,22 @@ export interface ComponentData {
   text: string;
 }
 
+export interface Record {
+  elementId?: string; // 当前选中元素的id
+  type: 'add' | 'delete' | 'change';
+  idx?: number; // 当前所处的元素列表的索引位置
+  component?: ComponentData;
+  props?: Partial<TextComponentProps>
+}
+
 export interface EditorProps {
   backPic: string;
   components: ComponentData[];
   currentElement: string;
-  copyComponent: ComponentData | ''
+  copyComponent: ComponentData | '';
+  historyRecords: Record[];
+  recordPointer: number;
+  historyCompnent: ComponentData[]
 }
 
 export interface GlobalDataProps {

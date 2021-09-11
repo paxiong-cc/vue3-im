@@ -61,29 +61,29 @@ describe('Layout.vue', () => {
     (message as jest.Mocked<typeof message>).success.mockReset()
   })
 
-  it('登录按钮展示为登录', () => {
-    expect(wrapper.get('.login').text()).toBe('登录')
-  })
+  // it('登录按钮展示为登录', () => {
+  //   expect(wrapper.get('.login').text()).toBe('登录')
+  // })
 
-  it('点击登录', async() => {
-    await wrapper.get('.login').trigger('click')
-    expect(message.success).toHaveBeenCalled()
-    expect(store.state.user.userName).toBe('paxiong')
-  })
+  // it('点击登录', async() => {
+  //   await wrapper.get('.login').trigger('click')
+  //   expect(message.success).toHaveBeenCalled()
+  //   expect(store.state.user.userName).toBe('paxiong')
+  // })
 
-  it('登录成功后', () => {
-    expect(wrapper.get('.user-profile-component').html()).toContain('paxiong')
-  })
+  // it('登录成功后', () => {
+  //   expect(wrapper.get('.user-profile-component').html()).toContain('paxiong')
+  // })
 
-  it('点击退出登录', async() => {
-    await wrapper.get('.user-profile-dropdown div').trigger('click')
-    expect(wrapper.find('.user-profile-component').exists()).toBeFalsy()
-    expect(message.success).toHaveBeenCalledTimes(1)
-    jest.runAllTimers()
-    expect(mockRoutes).toEqual(['/'])
-  })
+  // it('点击退出登录', async() => {
+  //   await wrapper.get('.user-profile-dropdown div').trigger('click')
+  //   expect(wrapper.find('.user-profile-component').exists()).toBeFalsy()
+  //   expect(message.success).toHaveBeenCalledTimes(1)
+  //   jest.runAllTimers()
+  //   expect(mockRoutes).toEqual(['/'])
+  // })
 
-  it('退出登录成功后', () => {
-    expect(wrapper.get('.login').html()).toContain('登录')
-  })
+  // it('退出登录成功后', () => {
+  //   expect(wrapper.get('.login').html()).toContain('登录')
+  // })
 })
