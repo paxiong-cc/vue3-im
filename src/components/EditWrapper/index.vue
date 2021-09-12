@@ -5,6 +5,7 @@
     @mousedown="startMove"
     :class="{ active: active }"
     :style="styles"
+    :data-component-id="id"
   >
     <slot></slot>
     <div class="resizers">
@@ -20,7 +21,6 @@
 import { defineComponent, PropType, ref, nextTick, computed } from 'vue'
 import { ComponentData } from '@/store/interfaces'
 import { pick as _pick } from 'lodash-es'
-import { context } from 'ant-design-vue/lib/vc-image/src/PreviewGroup'
 type ResizePosition = 'top-left' | 'top-right' | 'bottom-left' | 'bottom-right'
 interface OriginalPositions {
   left: number;
@@ -60,17 +60,17 @@ export default defineComponent({
       if (props.id !== props.selectId) {
         return
       }
+
+      let moveFlag = false
+
       // 鼠标与元素偏移
       const gap = {
         x: 0,
         y: 0
       }
 
-      let elementWidth = 0
-
       if (element.value) {
-        const { left, top, width } = element.value.getBoundingClientRect()
-        elementWidth = width
+        const { left, top } = element.value.getBoundingClientRect()
         gap.x = e.clientX - left
         gap.y = e.clientY - top
       }
@@ -78,6 +78,7 @@ export default defineComponent({
       // 获取当前元素的top, left
       const caculateMovePosition = (e: MouseEvent) => {
         const container = document.getElementById('canvas-area') as HTMLElement
+        moveFlag = true
 
         const left = e.clientX - gap.x - container.offsetLeft >= 0
           ? e.clientX - gap.x - container.offsetLeft
@@ -102,8 +103,10 @@ export default defineComponent({
       }
       const mouseUp = (e: MouseEvent) => {
         document.removeEventListener('mousemove', mouseMove)
-        const { left, top } = caculateMovePosition(e)
-        context.emit('moveDown', { left, top })
+        if (moveFlag) {
+          const { left, top } = caculateMovePosition(e)
+          context.emit('moveDown', { left, top })
+        }
 
         nextTick(() => {
           document.removeEventListener('mouseup', mouseUp)

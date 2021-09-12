@@ -133,11 +133,11 @@ const editor: Module<EditorProps, GlobalDataProps> = {
     },
 
     // 删除元素
-    deleteComponent(state) {
+    deleteComponent(state, id: string) {
       let deleteItem
       let index = -1
       state.components = state.components.filter((item, idx) => {
-        if (item.id !== state.currentElement) {
+        if (item.id !== (id || state.currentElement)) {
           return true
         } else {
           deleteItem = item

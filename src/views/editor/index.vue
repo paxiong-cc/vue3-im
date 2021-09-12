@@ -65,7 +65,7 @@
 </template>
 
 <script lang='ts'>
-import { defineComponent, computed, ref } from 'vue'
+import { defineComponent, computed, ref, onMounted, onUnmounted } from 'vue'
 import { useStore } from 'vuex'
 import { GlobalDataProps, ComponentData } from '@/store/interfaces'
 import PText from '@/components/PText/index.vue'
@@ -77,6 +77,8 @@ import MountList from '@/components/MountList/index.vue'
 import EditGroup from '@/components/EditGroup/index.vue'
 import EditWrapper from '@/components/EditWrapper/index.vue'
 import initHotKeys from '@/plugins/hotKeys'
+import initContextMenu from '@/plugins/contextMenu'
+import { getParentElement } from '@/utils/commonMethods'
 
 export default defineComponent({
   components: {
@@ -90,6 +92,7 @@ export default defineComponent({
   },
 
   setup() {
+    initContextMenu()
     initHotKeys()
     const store = useStore<GlobalDataProps>()
 
@@ -122,6 +125,22 @@ export default defineComponent({
     const moveDown = (obj: { left?: number, top?: number, width?: number, height?: number }) => {
       store.commit('setPosition', obj)
     }
+
+    const handleClick = (e: MouseEvent) => {
+      const wrapperElement = getParentElement(e.target as HTMLElement, 'edit-wrapper')
+      if (!wrapperElement) {
+        store.commit('selectCurrentElement', '')
+      }
+    }
+
+    // 点击元素外自动取消选中
+    onMounted(() => {
+      document.addEventListener('click', handleClick)
+    })
+
+    onUnmounted(() => {
+      document.removeEventListener('click', handleClick)
+    })
 
     return {
       components,

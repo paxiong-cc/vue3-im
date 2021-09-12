@@ -13,4 +13,5 @@ createApp(App)
   .use(Antd)
   .use(store)
   .use(router)
-  .mount('#app') 
+  .mount('#app')
+
