@@ -10,8 +10,11 @@
 
       <!-- 编辑页面 -->
       <a-layout style="padding: 0 24px 24px">
-        <a-layout-content class="preview-container">
-          <p>画布区域</p>
+        <a-layout-content :class="{ 'clear-shadow': clearShadow }" class="preview-container">
+          <div style="display: flex; justify-content: space-between">
+            <p>画布区域</p>
+            <div @click="save" style="margin-left: 20px">预览</div>
+          </div>
           <div class="preview-list" id="canvas-area" :style="{ backgroundImage: `url(${getBackPic})` }">
             <edit-wrapper
               v-for="component in editComponents"
@@ -61,11 +64,14 @@
         </a-tabs>
       </a-layout-sider>
     </a-layout>
+
+    <!-- 预览 -->
+    <Preview v-model="showPreView" :url="url" />
   </div>
 </template>
 
 <script lang='ts'>
-import { defineComponent, computed, ref, onMounted, onUnmounted } from 'vue'
+import { defineComponent, computed, ref, onMounted, onUnmounted, nextTick } from 'vue'
 import { useStore } from 'vuex'
 import { GlobalDataProps, ComponentData } from '@/store/interfaces'
 import PText from '@/components/PText/index.vue'
@@ -79,6 +85,8 @@ import EditWrapper from '@/components/EditWrapper/index.vue'
 import initHotKeys from '@/plugins/hotKeys'
 import initContextMenu from '@/plugins/contextMenu'
 import { getParentElement } from '@/utils/commonMethods'
+import html2canvas from 'html2canvas'
+import Preview from './components/Preview.vue'
 
 export default defineComponent({
   components: {
@@ -88,7 +96,8 @@ export default defineComponent({
     MountList,
     BackGround,
     EditGroup,
-    EditWrapper
+    EditWrapper,
+    Preview
   },
 
   setup() {
@@ -106,6 +115,9 @@ export default defineComponent({
     // const selectItemId = ref<string>('')
     const selectItemId = computed(() => store.getters.getCurrentElement)
     const activeKey = ref('1')
+    const clearShadow = ref(false)
+    const showPreView = ref(false)
+    const url = ref('')
 
     // 添加组件
     const addItem = (item: ComponentData) => {
@@ -129,7 +141,10 @@ export default defineComponent({
     const handleClick = (e: MouseEvent) => {
       const wrapperElement = getParentElement(e.target as HTMLElement, 'edit-wrapper')
       if (!wrapperElement) {
-        store.commit('selectCurrentElement', '')
+        const previewList = getParentElement(e.target as HTMLElement, 'preview-list')
+        if (previewList) {
+          store.commit('selectCurrentElement', '')
+        }
       }
     }
 
@@ -142,16 +157,47 @@ export default defineComponent({
       document.removeEventListener('click', handleClick)
     })
 
+    // 保存画布图片
+    const save = async() => {
+      function getCanvasBlob(canvas: HTMLCanvasElement) {
+        return new Promise<Blob | null>(resolve => {
+          canvas.toBlob(blob => {
+            resolve(blob)
+          })
+        })
+      }
+
+      clearShadow.value = true
+      await nextTick()
+
+      // 获取页面DOM生成cavas
+      const canvas = await html2canvas(document.querySelector('#canvas-area') as HTMLElement, { width: 375, useCORS: true, scale: 1 })
+      // 生成的canvas二进制
+      const canvasBlob = await getCanvasBlob(canvas)
+
+      // const file = new File([canvasBlob], 'name')
+      // const formData = new FormData()
+      // formData.append(file.name, file)
+
+      url.value = canvas.toDataURL()
+      clearShadow.value = false
+      showPreView.value = true
+    }
+
     return {
       components,
       defaultTextTemplates,
       selectItemProps,
+      clearShadow,
       selectItemId,
       activeKey,
       editComponents,
       getBackPic,
+      url,
+      showPreView,
       selectItem,
       moveDown,
+      save,
       addItem,
       contentChange
     }
@@ -198,5 +244,9 @@ export default defineComponent({
 }
 #canvas-area {
   background-size: 100% auto;
+}
+
+.preview-container.clear-shadow .preview-list  * {
+  box-shadow: none !important;
 }
 </style>

@@ -33,7 +33,9 @@
     </a-layout>
     <!-- 底部 -->
     <a-layout-footer style="text-align: center">
-      © 怕熊（paxiong.com）版权所有 | 蜀ICP备2021006541号
+      © 怕熊（paxiong.top）版权所有 | <a href="https://beian.miit.gov.cn/#/Integrated/index" class="record" target="_blank">
+        蜀ICP备2021006541号
+      </a>
     </a-layout-footer>
   </section>
 </template>
