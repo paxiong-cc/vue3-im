@@ -1,5 +1,8 @@
 // vue.config.js
 const path = require('path')
+const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin
+const environment = process.env.NODE_ENV
+const webpack = require('webpack')
 
 module.exports = {
   // 处理打包后路径问题
@@ -8,6 +11,24 @@ module.exports = {
   chainWebpack: config => {
     const types = ['vue-modules', 'vue', 'normal-modules', 'normal']
     types.forEach(type => addStyleResource(config.module.rule('scss').oneOf(type)))
+  },
+
+  configureWebpack: config => {
+    config.plugins.push(
+      // eslint-disable-next-line no-undef
+      new webpack.IgnorePlugin({
+        resourceRegExp: /^\.\/locale$/,
+        contextRegExp: /moment$/
+      })
+    )
+
+    if (environment === 'development') {
+      config.plugins.push(
+        new BundleAnalyzerPlugin({
+          analyzerMode: 'static'
+        })
+      )
+    }
   },
 
   productionSourceMap: false

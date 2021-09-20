@@ -7,6 +7,7 @@ import 'ant-design-vue/dist/antd.css'
 // import TComponent from 'lego-bricks'
 // import TComponent from 'px-component'
 // import 'test-paxiong-component/dist/bundle.css'
+import '@/http/config'
 
 createApp(App)
   // .use(TComponent)
