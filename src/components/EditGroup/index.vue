@@ -14,7 +14,7 @@
 import { defineComponent, ref, PropType, computed } from 'vue'
 import PropsTable from '../PropsTable/index.vue'
 import { TextComponentProps } from '../PText/interface'
-import { intersection as _intersection } from 'lodash'
+import { intersection as _intersection } from 'lodash-es'
 
 export interface RenderGroup {
   header: string;
