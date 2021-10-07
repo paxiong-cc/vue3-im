@@ -15,40 +15,45 @@ const routes: Array<RouteRecordRaw> = [
         component: () => import('@/views/editor/index.vue')
       },
       {
-        path: 'notFound',
-        name: '404',
-        component: () => import('@/views/common/notFound.vue')
+        path: 'home',
+        name: '模板',
+        component: () => import('@/views/common/home.vue')
       }
+      // {
+      //   path: 'notFound',
+      //   name: '404',
+      //   component: () => import('@/views/common/notFound.vue')
+      // }
     ]
   },
 
   // 模板
-  {
-    path: '',
-    name: 'Template',
-    component: Layout,
-    children: [
-      {
-        path: 'template/:id',
-        name: '模板',
-        component: () => import('@/views/template/index.vue')
-      }
-    ]
-  },
+  // {
+  //   path: '',
+  //   name: 'Template',
+  //   component: Layout,
+  //   children: [
+  //     {
+  //       path: 'template/:id',
+  //       name: '模板',
+  //       component: () => import('@/views/template/index.vue')
+  //     }
+  //   ]
+  // },
 
-  // 编辑器
-  {
-    path: '',
-    name: 'Editor',
-    component: Layout,
-    children: [
-      {
-        path: 'editor',
-        name: '模板',
-        component: () => import('@/views/editor/index.vue')
-      }
-    ]
-  },
+  // // 编辑器
+  // {
+  //   path: '',
+  //   name: 'Editor',
+  //   component: Layout,
+  //   children: [
+  //     {
+  //       path: 'editor',
+  //       name: '模板',
+  //       component: () => import('@/views/editor/index.vue')
+  //     }
+  //   ]
+  // },
 
   {
     path: '/:catchAll(.*)',

@@ -1,6 +1,7 @@
 <template>
   <div class="work-detail-container">
-    <a-row type="flex" justify="center" v-if="detail">
+    1232131
+    <!-- <a-row type="flex" justify="center" v-if="detail">
       <a-col :span="4" class="cover-img">
         <img :src="detail.coverImg" alt="">
       </a-col>
@@ -31,7 +32,7 @@
         </a-button>
       </div>
       </a-col>
-    </a-row>
+    </a-row> -->
   </div>
 </template>
 

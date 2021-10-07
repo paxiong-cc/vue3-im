@@ -1,7 +1,7 @@
 // vue.config.js
 const path = require('path')
 const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin
-const environment = process.env.NODE_ENV
+const ANALYZE_MODE = process.env.ANALYZE_MODE
 const webpack = require('webpack')
 
 module.exports = {
@@ -29,7 +29,7 @@ module.exports = {
     )
 
     // 打包分析
-    if (environment === 'development') {
+    if (ANALYZE_MODE === 'analyze') {
       config.plugins.push(
         new BundleAnalyzerPlugin({
           analyzerMode: 'static'

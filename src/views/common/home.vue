@@ -1,6 +1,7 @@
 <template>
   <div class="home-box">
-    <a-row :gutter="16">
+    首页
+    <!-- <a-row :gutter="16">
       <a-col :span="6" v-for="item in list" :key="item.id" class="poster-item">
         <router-link :to="`/template/${item.id}`">
           <a-card hoverable>
@@ -24,7 +25,7 @@
           </a-card>
         </router-link>
       </a-col>
-    </a-row>
+    </a-row> -->
   </div>
 </template>
 
