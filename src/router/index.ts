@@ -15,6 +15,11 @@ const routes: Array<RouteRecordRaw> = [
         component: () => import('@/views/editor/index.vue')
       },
       {
+        path: 'screen',
+        name: 'screen',
+        component: () => import('@/views/tt/homeScreen.vue')
+      },
+      {
         path: 'home',
         name: '模板',
         component: () => import('@/views/common/home.vue')
