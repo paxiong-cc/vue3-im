@@ -47,6 +47,7 @@ export default {
   methods: {
     // 初始化
     init() {
+      // eslint-disable-next-line no-undef
       const view = echarts.init(document.getElementById('property-zhu'))
       view.setOption(this.getOption())
     },
@@ -109,6 +110,7 @@ export default {
               color: function(params) {
                 // 自定义颜色
                 var colorList = [
+                  // eslint-disable-next-line no-undef
                   new echarts.graphic.LinearGradient(0, 0, 0, 1, [{
                     offset: 0,
                     color: '#40A7D9'
@@ -116,6 +118,7 @@ export default {
                     offset: 1,
                     color: '#6DCDE6'
                   }]),
+                  // eslint-disable-next-line no-undef
                   new echarts.graphic.LinearGradient(0, 0, 0, 1, [{
                     offset: 0,
                     color: '#1D43F3'
@@ -123,6 +126,7 @@ export default {
                     offset: 1,
                     color: '#4366F3'
                   }]),
+                  // eslint-disable-next-line no-undef
                   new echarts.graphic.LinearGradient(0, 0, 0, 1, [{
                     offset: 0,
                     color: '#D08030'
@@ -130,6 +134,7 @@ export default {
                     offset: 1,
                     color: '#F5A43A'
                   }]),
+                  // eslint-disable-next-line no-undef
                   new echarts.graphic.LinearGradient(0, 0, 0, 1, [{
                     offset: 0,
                     color: '#A938E2'
@@ -137,6 +142,7 @@ export default {
                     offset: 1,
                     color: '#E23AF5'
                   }]),
+                  // eslint-disable-next-line no-undef
                   new echarts.graphic.LinearGradient(0, 0, 0, 1, [{
                     offset: 0,
                     color: '#AA522F'
@@ -186,6 +192,7 @@ export default {
               color: function(params) {
                 // 自定义颜色
                 var colorList = [
+                  // eslint-disable-next-line no-undef
                   new echarts.graphic.LinearGradient(0, 0, 0, 1, [{
                     offset: 0,
                     color: '#40A7D9'
@@ -193,6 +200,7 @@ export default {
                     offset: 1,
                     color: '#6DCDE6'
                   }]),
+                  // eslint-disable-next-line no-undef
                   new echarts.graphic.LinearGradient(0, 0, 0, 1, [{
                     offset: 0,
                     color: '#1D43F3'
@@ -200,6 +208,7 @@ export default {
                     offset: 1,
                     color: '#4366F3'
                   }]),
+                  // eslint-disable-next-line no-undef
                   new echarts.graphic.LinearGradient(0, 0, 0, 1, [{
                     offset: 0,
                     color: '#D08030'
@@ -207,6 +216,7 @@ export default {
                     offset: 1,
                     color: '#F5A43A'
                   }]),
+                  // eslint-disable-next-line no-undef
                   new echarts.graphic.LinearGradient(0, 0, 0, 1, [{
                     offset: 0,
                     color: '#A938E2'
@@ -214,6 +224,7 @@ export default {
                     offset: 1,
                     color: '#E23AF5'
                   }]),
+                  // eslint-disable-next-line no-undef
                   new echarts.graphic.LinearGradient(0, 0, 0, 1, [{
                     offset: 0,
                     color: '#AA522F'
@@ -276,6 +287,7 @@ export default {
               color: function(params) {
                 // 自定义颜色
                 var colorList = [
+                  // eslint-disable-next-line no-undef
                   new echarts.graphic.LinearGradient(0, 0, 0, 1, [{
                     offset: 0,
                     color: 'rgba(79, 180, 222, .5)'
@@ -283,6 +295,7 @@ export default {
                     offset: 1,
                     color: 'rgba(79, 180, 222, .2)'
                   }]),
+                  // eslint-disable-next-line no-undef
                   new echarts.graphic.LinearGradient(0, 0, 0, 1, [{
                     offset: 0,
                     color: 'rgba(29,67,243, .8)'
@@ -290,6 +303,7 @@ export default {
                     offset: 1,
                     color: 'rgba(29,67,243, .2)'
                   }]),
+                  // eslint-disable-next-line no-undef
                   new echarts.graphic.LinearGradient(0, 0, 0, 1, [{
                     offset: 0,
                     color: 'rgba(205,125,48, .8)'
@@ -297,6 +311,7 @@ export default {
                     offset: 1,
                     color: 'rgba(205,125,48, .2)'
                   }]),
+                  // eslint-disable-next-line no-undef
                   new echarts.graphic.LinearGradient(0, 0, 0, 1, [{
                     offset: 0,
                     color: 'rgba(169,56,226, .8)'
@@ -304,6 +319,7 @@ export default {
                     offset: 1,
                     color: 'rgba(169,56,226, .2)'
                   }]),
+                  // eslint-disable-next-line no-undef
                   new echarts.graphic.LinearGradient(0, 0, 0, 1, [{
                     offset: 0,
                     color: 'rgba(180,84,46, .8)'

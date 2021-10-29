@@ -11,12 +11,12 @@ const routes: Array<RouteRecordRaw> = [
     children: [
       {
         path: '',
-        name: '首页',
+        name: '编辑海报',
         component: () => import('@/views/editor/index.vue')
       },
       {
         path: 'screen',
-        name: 'screen',
+        name: '大屏可视化',
         component: () => import('@/views/tt/homeScreen.vue')
       },
       {
@@ -69,6 +69,11 @@ const routes: Array<RouteRecordRaw> = [
 const router = createRouter({
   history: createWebHistory(),
   routes
+})
+
+router.beforeEach((to, from, next) => {
+  document.title = to.name as string
+  next()
 })
 
 export default router

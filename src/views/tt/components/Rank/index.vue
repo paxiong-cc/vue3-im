@@ -20,7 +20,7 @@ export default {
   components: {
     Property,
     ProductSale,
-    ReportRepair,
+    ReportRepair
   }
 }
 </script>
