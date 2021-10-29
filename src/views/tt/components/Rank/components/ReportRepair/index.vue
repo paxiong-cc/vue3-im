@@ -37,9 +37,9 @@ export default {
   data() {
     return {
       property: [
-        {value: 1048, name: '待处理', itemStyle: {color: '#F25C22'}},
-        {value: 735, name: '处理中', itemStyle: {color: '#228FFE'}},
-        {value: 580, name: '已处理', itemStyle: {color: '#FFB400'}},
+        { value: 1048, name: '待处理', itemStyle: { color: '#F25C22' } },
+        { value: 735, name: '处理中', itemStyle: { color: '#228FFE' } },
+        { value: 580, name: '已处理', itemStyle: { color: '#FFB400' } }
       ]
     }
   },
@@ -53,6 +53,7 @@ export default {
   methods: {
     // 初始化
     init() {
+      // eslint-disable-next-line no-undef
       const view = echarts.init(document.getElementById('report'))
       view.setOption(this.getOption())
     },
@@ -64,14 +65,14 @@ export default {
         tooltip: {
           trigger: 'item'
         },
-        graphic:{
-          type:"text",
-          left:"center",
-          top:"center",
-          style:{
-            text:"报事报修",
-            textAlign:"center",
-            fill:"#fff",
+        graphic: {
+          type: 'text',
+          left: 'center',
+          top: 'center',
+          style: {
+            text: '报事报修',
+            textAlign: 'center',
+            fill: '#fff',
             fontSize: 16,
             fontWeight: 600
           }
@@ -93,7 +94,7 @@ export default {
             data: this.property
           }
         ]
-      };
+      }
       return option
     }
   }

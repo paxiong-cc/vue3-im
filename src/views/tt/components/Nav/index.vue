@@ -20,7 +20,7 @@
         <div class="circle-left">
           <div v-for="key in 4" :key="key" :class="`circle-${key}`"></div>
         </div>
-        <div class="company-title">魅居科技</div>
+        <div class="company-title">xxxx</div>
         <ul class="circle-right">
           <li v-for="key in 4" :key="key" :class="`circle-${key}`"></li>
         </ul>
