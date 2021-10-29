@@ -45,8 +45,7 @@ export default {
           { name: '家用百货', count: 100 },
           { name: '粮油酒水', count: 30 },
           { name: '粮油酒水', count: 20 },
-          { name: '粮油酒水', count: 13 },
-          { name: '粮油酒水', count: 1 }
+          { name: '粮油酒水', count: 13 }
         ]
       },
       colorList: ['#6285E2', '#EA68A2', '#FAAD14', '#2C63FD', '#FB4D4B', '#14C7FA']
